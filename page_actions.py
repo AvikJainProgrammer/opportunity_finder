@@ -90,20 +90,24 @@ class PageActions:
         current_year = int(self.driver.find_element(By.CLASS_NAME, "ui-datepicker-year").get_attribute('value'))
         current_month = int(self.driver.find_element(By.CLASS_NAME, "ui-datepicker-month").get_attribute('value')) + 1  # Month is zero-indexed
         
+        # Date picker button locator
+        date_picker_next_button_locator = (By.CLASS_NAME, "ui-datepicker-next")
+        date_picker_previous_button_locator = (By.CLASS_NAME, "ui-datepicker-next")
+
         # Adjust the year
         while current_year < target_year:
-            self.click_on_element(By.CLASS_NAME, "ui-datepicker-next")
+            self.click_on_element(date_picker_next_button_locator)
             current_year += 1
         while current_year > target_year:
-            self.click_on_element(By.CLASS_NAME, "ui-datepicker-prev")
+            self.click_on_element(date_picker_previous_button_locator)
             current_year -= 1
         
         # Adjust the month
         while current_month < target_month:
-            self.click_on_element(By.CLASS_NAME, "ui-datepicker-next")
+            self.click_on_element(date_picker_next_button_locator)
             current_month += 1
         while current_month > target_month:
-            self.click_on_element(By.CLASS_NAME, "ui-datepicker-prev")
+            self.click_on_element(date_picker_previous_button_locator)
             current_month -= 1
         
         # Click the day

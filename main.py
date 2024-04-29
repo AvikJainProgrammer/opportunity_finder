@@ -21,7 +21,7 @@ def main():
     department_dropdown_locator = (By.ID, "select2-department-container")
     date_input_locator_from = (By.ID, "bidendFromMinistrySearch")
     date_to_set_from = DateUtil.get_current_date_str()
-    date_input_locator_to = (By.ID, "bidendFromMinistrySearch")
+    date_input_locator_to = (By.ID, "bidendToMinistrySearch")
     date_to_set_to = DateUtil.get_date_with_offset(30)
 
     # Perform actions
