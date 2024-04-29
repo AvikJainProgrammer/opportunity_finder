@@ -39,7 +39,6 @@ def main():
     actions.select_from_select2_by_text(department_dropdown_locator, "DEPARTMENT OF DEFENCE PRODUCTION")
     actions.set_date_from_datepicker(date_input_locator_from, date_to_set_from)
     actions.set_date_from_datepicker(date_input_locator_to, date_to_set_to)
-    utilities.print_element_details(search_button_locator)
     actions.click_on_element(search_button_locator)
 
     # Wait and close
