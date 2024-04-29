@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 class PageActions:
     def __init__(self, driver):
@@ -54,19 +55,61 @@ class PageActions:
         self.driver.switch_to.window(new_tab)
         print(f"Currently on new tab: {self.driver.current_window_handle}")
 
-    def select_from_select2(self, dropdown_locator, option_text):
-        """Selects an option from a select2 dropdown by its visible text."""
+    def select_from_select2_by_text(self, dropdown_locator, option_text):
+        """Selects an option from a select2 dropdown by the visible text."""
         try:
-            # Click the select2 dropdown to open the list of options
+            # Wait for the select2 element to be clickable and click it to open the dropdown
+            WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(dropdown_locator))
+            print("Dropdown element is visible and clickable.")
             self.click_on_element(dropdown_locator)
 
-            # Wait for the dropdown options to become visible and click the desired option
-            option_locator = (By.XPATH, f"//li[text()='{option_text}']")
+        except TimeoutException:
+            print("Timeout: Dropdown element was not visible or clickable within the expected time.")
+            return  # Exit the function if the dropdown is not interactable
+        except Exception as e:
+            print(f"Error interacting with the dropdown element: {e}")
+            return  # Exit the function on other errors
+
+        try:
+            # Wait for the option to be visible and click on it
+            option_locator = (By.XPATH, f"//li[contains(., '{option_text}')]")
             WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located(option_locator))
             self.click_on_element(option_locator)
-
             print(f"Selected '{option_text}' from select2 dropdown.")
         except Exception as e:
-            print("Error selecting from select2 dropdown:", e)
+            print("Error selecting option from select2 dropdown:", e)
+
+    def set_date_from_datepicker(self, input_locator, date):
+        """Sets a date on a jQuery UI datepicker."""
+        # Click the input field to display the datepicker
+        self.click_on_element(input_locator)
+        
+        # Calculate differences in month and year from current displayed date
+        # Example date format '2024-04-15' for April 15, 2024
+        target_year, target_month, target_day = map(int, date.split('-'))
+        current_year = int(self.driver.find_element(By.CLASS_NAME, "ui-datepicker-year").get_attribute('value'))
+        current_month = int(self.driver.find_element(By.CLASS_NAME, "ui-datepicker-month").get_attribute('value')) + 1  # Month is zero-indexed
+        
+        # Adjust the year
+        while current_year < target_year:
+            self.click_on_element(By.CLASS_NAME, "ui-datepicker-next")
+            current_year += 1
+        while current_year > target_year:
+            self.click_on_element(By.CLASS_NAME, "ui-datepicker-prev")
+            current_year -= 1
+        
+        # Adjust the month
+        while current_month < target_month:
+            self.click_on_element(By.CLASS_NAME, "ui-datepicker-next")
+            current_month += 1
+        while current_month > target_month:
+            self.click_on_element(By.CLASS_NAME, "ui-datepicker-prev")
+            current_month -= 1
+        
+        # Click the day
+        day_locator = (By.LINK_TEXT, str(target_day))
+        WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(day_locator)).click()
+
+
 
 
