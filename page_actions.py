@@ -1,8 +1,10 @@
+from selenium.webdriver import ActionChains
+import re
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementNotInteractableException
 
 class PageActions:
     def __init__(self, driver):
@@ -20,11 +22,18 @@ class PageActions:
     def click_on_element(self, locator):
         """Click on an element specified by its locator."""
         try:
+            # Wait until the element is clickable
             element = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(locator))
             element.click()
             print("Clicked on the element successfully.")
+        except TimeoutException:
+            print(f"Timeout: Failed to find a clickable element using {locator}. The element did not become clickable within the timeout period.")
+        except NoSuchElementException:
+            print(f"No Such Element: Failed to find an element using {locator}. Check if the locator is correct and the element exists on the page.")
+        except ElementNotInteractableException:
+            print(f"Element Not Interactable: The element identified by {locator} was found but was not interactable. It may be obscured, disabled, or not visible.")
         except Exception as e:
-            print("Error clicking on element:", e)
+            print(f"General Error clicking on element with {locator}: {e}")
 
     def switch_to_new_tab_and_close_others(self):
         """Switches to the newest browser tab and closes all others, ensuring safe operations."""

@@ -2,10 +2,12 @@ from date_util import DateUtil
 from selenium.webdriver.common.by import By
 from webdriver_setup import WebDriverSetup
 from page_actions import PageActions
+from selenium_utils import SeleniumUtilities
 
 
 def main():
     driver = WebDriverSetup.get_webdriver()
+    utilities = SeleniumUtilities(driver)
     actions = PageActions(driver)
 
     # Open the website
@@ -23,6 +25,8 @@ def main():
     date_to_set_from = DateUtil.get_current_date_str()
     date_input_locator_to = (By.ID, "bidendToMinistrySearch")
     date_to_set_to = DateUtil.get_date_with_offset(30)
+    search_button_locator = (By.XPATH, "//a[@onclick=\"searchBid('ministry-search')\"]")
+
 
     # Perform actions
     actions.hover_over_element(bid_link_locator)
@@ -35,6 +39,8 @@ def main():
     actions.select_from_select2_by_text(department_dropdown_locator, "DEPARTMENT OF DEFENCE PRODUCTION")
     actions.set_date_from_datepicker(date_input_locator_from, date_to_set_from)
     actions.set_date_from_datepicker(date_input_locator_to, date_to_set_to)
+    utilities.print_element_details(search_button_locator)
+    actions.click_on_element(search_button_locator)
 
     # Wait and close
     try:
