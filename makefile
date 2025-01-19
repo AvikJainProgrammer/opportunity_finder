@@ -4,7 +4,7 @@
 VENV_NAME = venv
 
 # Define the Python interpreter (you can specify python3 if needed)
-PYTHON = python3
+PYTHON = python
 
 # Default target
 all: venv install
