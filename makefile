@@ -17,8 +17,16 @@ venv:
 
 # Install dependencies from requirements.txt
 install: venv
-	@echo "Activating virtual environment and installing dependencies..."
-	@source $(VENV_NAME)/bin/activate && pip install -r requirements.txt
+	@echo "Installing dependencies..."
+	@if [ -f requirements.txt ]; then \
+		if [ "$(OS)" = "Windows_NT" ]; then \
+			$(VENV_NAME)\\Scripts\\activate.bat && pip install -r requirements.txt; \
+		else \
+			source $(VENV_NAME)/bin/activate && pip install -r requirements.txt; \
+		fi \
+	else \
+		echo "requirements.txt not found. Skipping install."; \
+	fi
 
 # Clean up the virtual environment (remove the venv folder)
 clean:
