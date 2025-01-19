@@ -25,3 +25,7 @@ clean:
 	@echo Removing virtual environment...
 	rmdir /s /q $(VENV_NAME)
 
+# Activate the virtual environment and run the program
+run:
+	@echo Activating virtual environment and running the program...
+	$(VENV_NAME)\Scripts\activate.bat && python main.py
