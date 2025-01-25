@@ -1,3 +1,6 @@
+# Ignore the entire .vscode folder 
+.vscode/
+
 #credential related files
 credentials.json
 config/static_config.json

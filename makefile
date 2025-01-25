@@ -20,6 +20,21 @@ install: venv
 	@echo Installing dependencies...
 	$(VENV_NAME)\Scripts\activate.bat && pip install -r requirements.txt
 
+# Configure VS Code settings
+configure_vscode:
+	@echo Configuring VS Code settings...
+	@mkdir .vscode 2> NUL || echo .vscode folder already exists
+	@echo { > .vscode/settings.json
+	@echo   "python.defaultInterpreterPath": "${workspaceFolder}/$(VENV_NAME)/Scripts/python.exe", >> .vscode/settings.json
+	@echo   "python.venvPath": "${workspaceFolder}/$(VENV_NAME)", >> .vscode/settings.json
+	@echo   "python.linting.enabled": true, >> .vscode/settings.json
+	@echo   "python.linting.flake8Enabled": true, >> .vscode/settings.json
+	@echo   "editor.formatOnSave": true, >> .vscode/settings.json
+	@echo   "python.testing.pytestEnabled": true, >> .vscode/settings.json
+	@echo   "python.testing.pytestArgs": ["tests"] >> .vscode/settings.json
+	@echo } >> .vscode/settings.json
+	@echo VS Code settings configured!
+
 # Clean up the virtual environment (remove the venv folder)
 clean:
 	@echo Removing virtual environment...
