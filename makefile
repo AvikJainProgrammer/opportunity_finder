@@ -28,7 +28,7 @@ configure_vscode:
 	@echo   "python.defaultInterpreterPath": "${workspaceFolder}/$(VENV_NAME)/Scripts/python.exe", >> .vscode/settings.json
 	@echo   "python.venvPath": "${workspaceFolder}/$(VENV_NAME)", >> .vscode/settings.json
 	@echo   "python.linting.enabled": true, >> .vscode/settings.json
-	@echo   "python.linting.flake8Enabled": true, >> .vscode/settings.json
+	@echo   "python.linting.pylintEnabled": true, >> .vscode/settings.json
 	@echo   "editor.formatOnSave": true, >> .vscode/settings.json
 	@echo   "python.testing.pytestEnabled": true, >> .vscode/settings.json
 	@echo   "python.testing.pytestArgs": ["tests"] >> .vscode/settings.json
