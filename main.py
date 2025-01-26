@@ -41,6 +41,10 @@ def main():
     actions.set_date_from_datepicker(date_input_locator_to, date_to_set_to)
     actions.click_on_element(search_button_locator)
 
+    #Extract Bid Details
+    bid_details = actions.extract_bid_details()
+    print(bid_details)
+
     # Wait and close
     try:
         input("Press Enter to close...")

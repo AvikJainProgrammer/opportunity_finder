@@ -123,6 +123,66 @@ class PageActions:
         day_locator = (By.LINK_TEXT, str(target_day))
         WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable(day_locator)).click()
 
+    def extract_bid_details(self):
+        """Extracts bid details from all cards on the page and returns them as a list of dictionaries."""
+        bid_details = []
+        
+        try:
+            # Wait for at least one card to be present
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "card")))
 
+            # Find all cards on the page
+            cards = self.driver.find_elements(By.CLASS_NAME, "card")
+
+            for card in cards:
+                try:
+                    bid_no = card.find_element(By.XPATH, ".//p[@class='bid_no  pull-left']/a").text.strip()
+                except NoSuchElementException:
+                    bid_no = None
+
+                try:
+                    # Try extracting from <a> tag first
+                    item = card.find_element(By.XPATH, ".//strong[contains(text(),'Items:')]/following-sibling::a").text.strip()
+                except NoSuchElementException:
+                    try:
+                        # If <a> tag is not present, extract plain text
+                        item = card.find_element(By.XPATH, ".//strong[contains(text(),'Items:')]/parent::*").text.split(":")[-1].strip()
+                    except NoSuchElementException:
+                        item = None  # If all attempts fail, set it to None
+
+                try:
+                    quantity = card.find_element(By.XPATH, ".//strong[contains(text(),'Quantity:')]").find_element(By.XPATH, "./parent::*").text.split(":")[-1].strip()
+                except NoSuchElementException:
+                    quantity = None
+
+                try:
+                    department = card.find_element(By.XPATH, ".//strong[contains(text(),'Department Name And Address:')]/following::div[1]").text.strip()
+                except NoSuchElementException:
+                    department = None
+
+                try:
+                    start_date = card.find_element(By.CLASS_NAME, "start_date").text.strip()
+                except NoSuchElementException:
+                    start_date = None
+
+                try:
+                    end_date = card.find_element(By.CLASS_NAME, "end_date").text.strip()
+                except NoSuchElementException:
+                    end_date = None
+
+                # Append the extracted data to the list
+                bid_details.append({
+                    "BID NO": bid_no,
+                    "Item": item,
+                    "Quantity": quantity,
+                    "Department Name And Address": department,
+                    "Start Date": start_date,
+                    "End Date": end_date
+                })
+
+        except TimeoutException:
+            print("Timeout: No bid cards found on the page.")
+
+        return bid_details
 
 
