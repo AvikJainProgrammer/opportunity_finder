@@ -39,8 +39,19 @@ configure_vscode:
 clean:
 	@echo Removing virtual environment...
 	rmdir /s /q $(VENV_NAME)
+	rmdir /s /q .vscode
 
 # Activate the virtual environment and run the program
 run:
 	@echo Activating virtual environment and running the program...
 	$(VENV_NAME)\Scripts\activate.bat && python main.py
+
+# Run pylint on a specific file (pass FILE=your_script.py)
+lint:
+	@echo Running pylint on $(FILE)...
+	@$(VENV_NAME)/Scripts/python -m pylint $(FILE)
+
+# Run pylint on the entire project
+lint_all:
+	@echo Running pylint on all Python files...
+	@$(VENV_NAME)/Scripts/python -m pylint $(shell find . -name "*.py")

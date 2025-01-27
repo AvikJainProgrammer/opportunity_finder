@@ -1,9 +1,8 @@
-from date_util import DateUtil
 from selenium.webdriver.common.by import By
 from webdriver_setup import WebDriverSetup
 from page_actions import PageActions
 from selenium_utils import SeleniumUtilities
-
+from date_util import DateUtil
 
 def main():
     driver = WebDriverSetup.get_webdriver()
