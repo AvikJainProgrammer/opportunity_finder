@@ -10,7 +10,7 @@ PYTHON = python
 all: venv install
 
 # Create a virtual environment
-venv:
+venv:	
 	@echo Creating virtual environment...
 	$(PYTHON) -m venv $(VENV_NAME)
 	@echo Virtual environment created at $(VENV_NAME)/
@@ -19,6 +19,7 @@ venv:
 install: venv
 	@echo Installing dependencies...
 	$(VENV_NAME)\Scripts\activate.bat && pip install -r requirements.txt
+
 
 # Configure VS Code settings
 configure_vscode:
@@ -51,7 +52,11 @@ lint:
 	@echo Running pylint on $(FILE)...
 	@$(VENV_NAME)/Scripts/python -m pylint $(FILE)
 
-# Run pylint on the entire project
+# Run pylint on the entire project (cross-platform)
 lint_all:
 	@echo Running pylint on all Python files...
-	@$(VENV_NAME)/Scripts/python -m pylint $(shell find . -name "*.py")
+ifeq ($(OS),Windows_NT)
+	@$(VENV_NAME)/Scripts/python -m pylint $(shell where /r . *.py)
+else
+	@$(VENV_NAME)/bin/python -m pylint $(shell find . -type f -name "*.py")
+endif

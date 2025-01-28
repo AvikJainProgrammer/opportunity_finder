@@ -1,0 +1,6 @@
+[MASTER]
+ignore=venv,.venv
+
+
+[IGNORE]
+paths=venv,.venv
