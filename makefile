@@ -59,4 +59,4 @@ ifeq ($(OS),Windows_NT)
 	@$(VENV_NAME)/Scripts/python -m pylint $(shell where /r . *.py)
 else
 	@$(VENV_NAME)/bin/python -m pylint $(shell find . -type f -name "*.py")
-endif
+endif 
